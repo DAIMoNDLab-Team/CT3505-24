@@ -1,5 +1,13 @@
 # CT3505-24 - Assignments 1 & 2 codebase installation instructions
 
+## Quickstart: automated installer
+Instead of following the manual steps below, you can run a script that installs everything (Miniconda, SUMO, VS Code, and the required Python packages) with minimal interaction:
+
+- **Windows 11:** double-click `install-windows.bat` (approve the administrator prompt if asked).
+- **macOS:** double-click `install-macos.command` (right-click -> Open the first time, and enter your Mac password if asked to install Homebrew).
+
+Both scripts are safe to re-run and skip anything already installed. Once finished, open VS Code, open this folder, and select the `ct3505` conda environment as your notebook kernel. If you'd rather install things yourself, or the script hits a snag, follow the manual steps below instead.
+
 ## Installation steps (MacOS, Linux)
 Note: these installation steps will be largely based on Visual Studio Code as your main interface. Other IDEs can be used, but the creation / activation of appropriate conda environments will have to be handled manually.
 
