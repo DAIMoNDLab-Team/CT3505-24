@@ -57,7 +57,20 @@ if [[ -z "$CONDA_EXE" || ! -x "$CONDA_EXE" ]]; then
 fi
 echo "Using conda: $CONDA_EXE"
 
-# --- 3. SUMO ---
+# --- 3. Rosetta 2 (Apple Silicon only) ---
+step "Checking for Rosetta 2..."
+if [[ "$(uname -m)" == "arm64" ]]; then
+    if arch -x86_64 /usr/bin/true >/dev/null 2>&1; then
+        echo "Rosetta 2 is already installed."
+    else
+        echo "Installing Rosetta 2 (required to run SUMO on Apple Silicon)..."
+        softwareupdate --install-rosetta --agree-to-license
+    fi
+else
+    echo "Not an Apple Silicon Mac, skipping."
+fi
+
+# --- 4. SUMO ---
 step "Checking for SUMO..."
 
 # Looks for an existing SUMO install (however it got there) by checking common
@@ -116,7 +129,7 @@ else
     echo "Could not automatically locate the SUMO install folder. You may need to set SUMO_HOME manually (see FAQs.md)."
 fi
 
-# --- 4. VS Code ---
+# --- 5. VS Code ---
 step "Checking for Visual Studio Code..."
 if ! command -v code >/dev/null 2>&1 && [[ ! -d "/Applications/Visual Studio Code.app" ]]; then
     echo "Installing Visual Studio Code..."
@@ -125,14 +138,14 @@ else
     echo "Visual Studio Code is already installed."
 fi
 
-# --- 5. Accept conda Terms of Service ---
+# --- 6. Accept conda Terms of Service ---
 step "Accepting conda's Terms of Service for the main and r channels..."
 "$CONDA_EXE" tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main \
     || echo "Note: could not run 'conda tos accept' for the main channel (fine on older conda versions that don't require it)."
 "$CONDA_EXE" tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r \
     || echo "Note: could not run 'conda tos accept' for the r channel (fine on older conda versions that don't require it)."
 
-# --- 6. Conda environment ---
+# --- 7. Conda environment ---
 step "Setting up the '$ENV_NAME' conda environment..."
 if "$CONDA_EXE" env list | grep -qE "^${ENV_NAME}[[:space:]]"; then
     echo "Environment '$ENV_NAME' already exists."
@@ -140,12 +153,12 @@ else
     "$CONDA_EXE" create -y -n "$ENV_NAME" python=3.11 pip
 fi
 
-# --- 7. Python packages ---
+# --- 8. Python packages ---
 step "Installing lxml, tud-sumo, and mercury..."
 "$CONDA_EXE" run -n "$ENV_NAME" pip install --upgrade pip
 "$CONDA_EXE" run -n "$ENV_NAME" pip install lxml tud-sumo mercury
 
-# --- 8. .env file ---
+# --- 9. .env file ---
 step "Writing SUMO_HOME to .env..."
 ENV_FILE="$PROJECT_DIR/.env"
 if [[ -n "$SUMO_HOME_PATH" ]]; then
