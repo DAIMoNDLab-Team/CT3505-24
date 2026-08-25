@@ -75,11 +75,21 @@ for SUMO_PKG_ID in $(pkgutil --pkgs 2>/dev/null | grep -i sumo); do
     remove_pkg_files "$SUMO_PKG_ID"
 done
 rm -rf /usr/local/share/sumo /usr/local/opt/sumo /Applications/sumo /Library/sumo 2>/dev/null
+# The official .pkg installer ships SUMO as a macOS framework bundle plus
+# launcher apps, which may not be fully covered by the package receipt.
+rm -rf "/Library/Frameworks/EclipseSUMO.framework" \
+       "/Applications/SUMO sumo-gui.app" "/Applications/SUMO netedit.app" \
+       "/Applications/SUMO Scenario Wizard.app" 2>/dev/null
 if command -v brew >/dev/null 2>&1; then
     brew uninstall --cask --zap sumo-gui >/dev/null 2>&1
     brew uninstall --zap sumo >/dev/null 2>&1
     brew untap dlr-ts/sumo >/dev/null 2>&1
 fi
+for RC in "$HOME/.zshrc" "$HOME/.bash_profile"; do
+    if [[ -f "$RC" ]] && grep -q "# >>> ct3505 sumo path >>>" "$RC"; then
+        sed -i '' '/# >>> ct3505 sumo path >>>/,/# <<< ct3505 sumo path <<</d' "$RC"
+    fi
+done
 
 # --- 3. XQuartz ---
 step "Removing XQuartz..."

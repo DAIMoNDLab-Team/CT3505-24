@@ -75,9 +75,12 @@ step "Checking for SUMO..."
 
 # Looks for an existing SUMO install (however it got there) by checking common
 # install locations for a "tools" subfolder, which only a real SUMO_HOME has.
+# The official .pkg installer ships SUMO as a macOS framework bundle, so that
+# takes priority (see tools/build_config/buildMacOSInstaller.py upstream).
 find_sumo_home() {
     local candidate
-    for candidate in /usr/local/share/sumo /usr/local/opt/sumo/share/sumo \
+    for candidate in "/Library/Frameworks/EclipseSUMO.framework/Versions/Current/EclipseSUMO/share/sumo" \
+                      /usr/local/share/sumo /usr/local/opt/sumo/share/sumo \
                       /opt/homebrew/share/sumo /opt/homebrew/opt/sumo/share/sumo \
                       /Applications/sumo /Library/sumo; do
         if [[ -d "$candidate/tools" ]]; then
@@ -85,7 +88,7 @@ find_sumo_home() {
             return 0
         fi
     done
-    find /usr/local /opt /Applications /Library -maxdepth 6 -type d -name sumo -path "*share*" 2>/dev/null | head -n1
+    find -L /usr/local /opt /Applications /Library -maxdepth 8 -type d -name sumo -path "*share*" 2>/dev/null | head -n1
 }
 
 SUMO_HOME_PATH="${SUMO_HOME:-}"
@@ -129,7 +132,32 @@ else
     echo "Could not automatically locate the SUMO install folder. You may need to set SUMO_HOME manually (see FAQs.md)."
 fi
 
-# --- 5. VS Code ---
+# --- 5. Add SUMO to PATH ---
+step "Adding SUMO's bin folder to your PATH..."
+if [[ -n "$SUMO_HOME_PATH" && "$SUMO_HOME_PATH" == */share/sumo ]]; then
+    SUMO_BIN_PATH="${SUMO_HOME_PATH%/share/sumo}/bin"
+    if [[ -d "$SUMO_BIN_PATH" ]]; then
+        export PATH="$SUMO_BIN_PATH:$PATH"
+        for RC in "$HOME/.zshrc" "$HOME/.bash_profile"; do
+            [[ -f "$RC" ]] || touch "$RC"
+            if ! grep -q "# >>> ct3505 sumo path >>>" "$RC" 2>/dev/null; then
+                {
+                    echo ""
+                    echo "# >>> ct3505 sumo path >>>"
+                    echo "export PATH=\"$SUMO_BIN_PATH:\$PATH\""
+                    echo "# <<< ct3505 sumo path <<<"
+                } >> "$RC"
+            fi
+        done
+        echo "Added $SUMO_BIN_PATH to PATH in ~/.zshrc and ~/.bash_profile (open a new terminal to pick it up)."
+    else
+        echo "Expected SUMO's bin folder at $SUMO_BIN_PATH but it doesn't exist, skipping."
+    fi
+else
+    echo "SUMO_HOME not set, skipping."
+fi
+
+# --- 6. VS Code ---
 step "Checking for Visual Studio Code..."
 if ! command -v code >/dev/null 2>&1 && [[ ! -d "/Applications/Visual Studio Code.app" ]]; then
     echo "Installing Visual Studio Code..."
@@ -138,14 +166,14 @@ else
     echo "Visual Studio Code is already installed."
 fi
 
-# --- 6. Accept conda Terms of Service ---
+# --- 7. Accept conda Terms of Service ---
 step "Accepting conda's Terms of Service for the main and r channels..."
 "$CONDA_EXE" tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main \
     || echo "Note: could not run 'conda tos accept' for the main channel (fine on older conda versions that don't require it)."
 "$CONDA_EXE" tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r \
     || echo "Note: could not run 'conda tos accept' for the r channel (fine on older conda versions that don't require it)."
 
-# --- 7. Conda environment ---
+# --- 8. Conda environment ---
 step "Setting up the '$ENV_NAME' conda environment..."
 if "$CONDA_EXE" env list | grep -qE "^${ENV_NAME}[[:space:]]"; then
     echo "Environment '$ENV_NAME' already exists."
@@ -153,12 +181,12 @@ else
     "$CONDA_EXE" create -y -n "$ENV_NAME" python=3.11 pip
 fi
 
-# --- 8. Python packages ---
+# --- 9. Python packages ---
 step "Installing lxml, tud-sumo, and mercury..."
 "$CONDA_EXE" run -n "$ENV_NAME" pip install --upgrade pip
 "$CONDA_EXE" run -n "$ENV_NAME" pip install lxml tud-sumo mercury
 
-# --- 9. .env file ---
+# --- 10. .env file ---
 step "Writing SUMO_HOME to .env..."
 ENV_FILE="$PROJECT_DIR/.env"
 if [[ -n "$SUMO_HOME_PATH" ]]; then
