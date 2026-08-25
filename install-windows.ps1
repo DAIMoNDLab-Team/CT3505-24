@@ -116,7 +116,18 @@ if (-not (Test-CommandExists "code")) {
     Write-Host "Visual Studio Code is already installed."
 }
 
-# --- 5. Conda environment ---
+# --- 5. Accept conda Terms of Service ---
+Write-Step "Accepting conda's Terms of Service for the main and r channels..."
+& $condaExe tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Note: could not run 'conda tos accept' for the main channel (fine on older conda versions that don't require it)." -ForegroundColor Yellow
+}
+& $condaExe tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Note: could not run 'conda tos accept' for the r channel (fine on older conda versions that don't require it)." -ForegroundColor Yellow
+}
+
+# --- 6. Conda environment ---
 Write-Step "Setting up the '$EnvName' conda environment..."
 $envList = & $condaExe env list
 if ($envList -match "^\s*$EnvName\s") {
@@ -125,12 +136,12 @@ if ($envList -match "^\s*$EnvName\s") {
     & $condaExe create -y -n $EnvName python=3.11 pip
 }
 
-# --- 6. Python packages ---
+# --- 7. Python packages ---
 Write-Step "Installing lxml, tud-sumo, and mercury..."
 & $condaExe run -n $EnvName pip install --upgrade pip
 & $condaExe run -n $EnvName pip install lxml tud-sumo mercury
 
-# --- 7. .env file ---
+# --- 8. .env file ---
 Write-Step "Writing SUMO_HOME to .env..."
 $envFile = Join-Path $ProjectDir ".env"
 if ($sumoHome) {

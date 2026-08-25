@@ -125,7 +125,14 @@ else
     echo "Visual Studio Code is already installed."
 fi
 
-# --- 5. Conda environment ---
+# --- 5. Accept conda Terms of Service ---
+step "Accepting conda's Terms of Service for the main and r channels..."
+"$CONDA_EXE" tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main \
+    || echo "Note: could not run 'conda tos accept' for the main channel (fine on older conda versions that don't require it)."
+"$CONDA_EXE" tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r \
+    || echo "Note: could not run 'conda tos accept' for the r channel (fine on older conda versions that don't require it)."
+
+# --- 6. Conda environment ---
 step "Setting up the '$ENV_NAME' conda environment..."
 if "$CONDA_EXE" env list | grep -qE "^${ENV_NAME}[[:space:]]"; then
     echo "Environment '$ENV_NAME' already exists."
@@ -133,12 +140,12 @@ else
     "$CONDA_EXE" create -y -n "$ENV_NAME" python=3.11 pip
 fi
 
-# --- 6. Python packages ---
+# --- 7. Python packages ---
 step "Installing lxml, tud-sumo, and mercury..."
 "$CONDA_EXE" run -n "$ENV_NAME" pip install --upgrade pip
 "$CONDA_EXE" run -n "$ENV_NAME" pip install lxml tud-sumo mercury
 
-# --- 7. .env file ---
+# --- 8. .env file ---
 step "Writing SUMO_HOME to .env..."
 ENV_FILE="$PROJECT_DIR/.env"
 if [[ -n "$SUMO_HOME_PATH" ]]; then
