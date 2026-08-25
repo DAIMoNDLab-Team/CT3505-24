@@ -182,9 +182,12 @@ else
 fi
 
 # --- 9. Python packages ---
+# Pinned to mercury 2.4.3: the notebooks use its "mercury run" CLI and
+# widget API (e.g. Button.clicked, fractional Sliders), both of which
+# changed in mercury 3.x.
 step "Installing lxml, tud-sumo, mercury, pandas, and python-dotenv..."
 "$CONDA_EXE" run -n "$ENV_NAME" pip install --upgrade pip
-"$CONDA_EXE" run -n "$ENV_NAME" pip install lxml tud-sumo mercury pandas python-dotenv
+"$CONDA_EXE" run -n "$ENV_NAME" pip install lxml tud-sumo "mercury==2.4.3" pandas python-dotenv
 
 # --- 10. .env file ---
 step "Writing SUMO_HOME to .env..."
@@ -201,5 +204,5 @@ step "Done!"
 echo "Open VS Code, then File -> Open Folder... and select:"
 echo "  $PROJECT_DIR"
 echo "Open Assignment_1.ipynb or Assignment_2.ipynb, click 'Select Kernel...' -> 'Python Environments...' and choose '$ENV_NAME'."
-echo "For Assignment 1, run 'mercury --working-dir .' in the VS Code terminal (with the '$ENV_NAME' environment active), or double-click run-assignment1-macos.command."
+echo "For Assignment 1, run 'mercury run' in the VS Code terminal (with the '$ENV_NAME' environment active), or double-click run-assignment1-macos.command."
 read -p $'\nPress Enter to close this window...'
