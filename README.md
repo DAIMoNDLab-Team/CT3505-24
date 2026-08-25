@@ -1,9 +1,11 @@
-# CT3505-24 - Traffic Flows and Management (TFM): 2025/26 Assignments 1&2
+# CT3505-24 - Traffic Flows and Management (TFM): 2026/27 Assignments 1&2
 
 ## Introduction
 
 This repository contains everything required to complete the integration project for course CT3505-24.
 Please refer to course materials (Brightspace) to align with your duties.
+
+See [INSTALL.md](INSTALL.md) for one-click scripts that install everything you need, launch Assignment 1, and (macOS only) uninstall everything again - or follow the manual steps there if you'd rather install things yourself.
 
 Assignment 1 builds on [the mercury project](https://runmercury.com). The typical python notebook is turned therefore in a simple, easy-to-use Graphical User Interface.
 

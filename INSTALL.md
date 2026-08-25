@@ -4,9 +4,18 @@
 Instead of following the manual steps below, you can run a script that installs everything (Miniconda, SUMO, VS Code, and the required Python packages) with minimal interaction:
 
 - **Windows 11:** double-click `install-windows.bat` (approve the administrator prompt if asked).
-- **macOS:** double-click `install-macos.command` (right-click -> Open the first time, and enter your Mac password if asked to install Homebrew).
+- **macOS:** double-click `install-macos.command` (If MacOS says this is an unverified file, open Settings -> Privacy & Security, scroll down to the bottom of the page and click \'open anyway\', See [here](./macos_privacy_security_example.png) for a screenshot.).
 
 Both scripts are safe to re-run and skip anything already installed. Once finished, open VS Code, open this folder, and select the `ct3505` conda environment as your notebook kernel. If you'd rather install things yourself, or the script hits a snag, follow the manual steps below instead.
+
+Once installed, you can launch Assignment 1 any time without opening a terminal or VS Code:
+
+- **Windows 11:** double-click `run-assignment1-windows.bat`.
+- **macOS:** double-click `run-assignment1-macos.command`.
+
+This activates the `ct3505` environment and runs `mercury run` for you; your browser opens automatically.
+
+**macOS only:** if you ever need to wipe everything the installer set up (e.g. to test the installer again from a clean machine), double-click `uninstall-macos.command`. This removes Homebrew, Miniconda, SUMO, VS Code, and the `ct3505` environment entirely, so only use it if you don't need those tools for anything else.
 
 ## Installation steps (MacOS, Linux)
 Note: these installation steps will be largely based on Visual Studio Code as your main interface. Other IDEs can be used, but the creation / activation of appropriate conda environments will have to be handled manually.
@@ -46,6 +55,8 @@ Note: these installation steps will be largely based on Visual Studio Code as yo
 3. Type 'mercury run' in the terminal window
 You can now work on Assignment 1
 
+Shortcut: once installed, you can skip steps 2-3 above by double-clicking `run-assignment1-windows.bat` instead.
+
 ## Additional settings for Assignment 2 (Windows only, *only once*!)
 1. In VSCode, click on the Extensions tab, navigate to the Jupyter extension
 2. Click on "Install specific version..." and select version 2025.7.0 from the list
@@ -59,7 +70,7 @@ You can now work on Assignment 2
 
 ## Running steps
 ### Assignment 1:
-- [ ] In the terminal window, type "mercury run". If everything went smoothly during installation, your browser will open with a new window. Have fun!
+- [ ] Double-click `run-assignment1-macos.command` (macOS) or `run-assignment1-windows.bat` (Windows), or type "mercury run" yourself in the terminal window. If everything went smoothly during installation, your browser will open with a new window. Have fun!
 ### Assignment 2:
 - [ ] Open the Jupyter notebook in Visual Studio Code and run it as-is, clicking the "Run all" button at the top of the page: ![vscode_gui](./vscode_gui.png)
 
