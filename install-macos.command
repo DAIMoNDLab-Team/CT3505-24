@@ -86,7 +86,11 @@ if [[ -z "$SUMO_HOME_PATH" ]] && ! command -v sumo >/dev/null 2>&1; then
     echo "Installing SUMO from the official installer package..."
     SUMO_VERSION="1.27.1"
     SUMO_PKG_URL="https://sumo.dlr.de/releases/${SUMO_VERSION}/sumo-${SUMO_VERSION}.pkg"
-    SUMO_PKG_FILE="$(mktemp -t sumo-pkg)"
+    # installer(8) requires a ".pkg" extension to recognize the file, so put
+    # it in its own temp dir with a fixed name rather than relying on mktemp's
+    # random suffix.
+    SUMO_TMP_DIR="$(mktemp -d -t sumo-pkg)"
+    SUMO_PKG_FILE="$SUMO_TMP_DIR/sumo.pkg"
     echo "Downloading $SUMO_PKG_URL ..."
     if ! curl -fsSL "$SUMO_PKG_URL" -o "$SUMO_PKG_FILE"; then
         echo "That version is no longer available, falling back to the nightly build..."
@@ -95,7 +99,7 @@ if [[ -z "$SUMO_HOME_PATH" ]] && ! command -v sumo >/dev/null 2>&1; then
     fi
     echo "Installing SUMO (you may be asked for your Mac login password)..."
     sudo installer -pkg "$SUMO_PKG_FILE" -target /
-    rm -f "$SUMO_PKG_FILE"
+    rm -rf "$SUMO_TMP_DIR"
 
     # sumo-gui and netedit need XQuartz to run.
     if [[ ! -d "/Applications/Utilities/XQuartz.app" && ! -d "/opt/X11" ]]; then
