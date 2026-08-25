@@ -39,6 +39,11 @@ fi
 
 echo "Starting Mercury for Assignment 1..."
 echo "Your browser will open automatically. Close this window (or press Ctrl+C) to stop the server when you're done."
-"$CONDA_EXE" run --no-capture-output -n "$ENV_NAME" mercury run
+# "conda run mercury run" mangles the argv Mercury's underlying Jupyter
+# server expects (it ends up treating "run" as a file to open), so activate
+# the environment properly instead, same as the documented manual steps.
+eval "$("$CONDA_EXE" shell.bash hook)"
+conda activate "$ENV_NAME"
+mercury run
 
 read -p $'\nPress Enter to close this window...'

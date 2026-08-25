@@ -46,6 +46,11 @@ if (-not ($envList -match "^\s*$EnvName\s")) {
 
 Write-Host "Starting Mercury for Assignment 1..."
 Write-Host "Your browser will open automatically. Close this window (or press Ctrl+C) to stop the server when you're done."
-& $condaExe run --no-capture-output -n $EnvName mercury run
+# "conda run mercury run" mangles the argv Mercury's underlying Jupyter
+# server expects (it ends up treating "run" as a file to open), so activate
+# the environment properly instead, same as the documented manual steps.
+(& $condaExe "shell.powershell" "hook") | Out-String | Invoke-Expression
+conda activate $EnvName
+mercury run
 
 Read-Host "`nPress Enter to close this window"
