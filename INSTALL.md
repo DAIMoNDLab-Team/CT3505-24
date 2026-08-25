@@ -33,7 +33,7 @@ Once installed, you can launch Assignment 1 any time without opening a terminal 
 
 This activates the `ct3505` environment and runs `mercury` for you; your browser opens automatically.
 
-**macOS only:** if you ever need to undo what the installer set up, double-click `uninstall-macos.command`. It always removes the `ct3505` conda environment and this project's `.env` file, and additionally removes Homebrew, Miniconda, SUMO, XQuartz, VS Code, and/or Rosetta 2 - but only whichever of those `install-macos.command` actually installed for you; anything you already had before running it is left untouched.
+If you ever need to undo what the installer set up, double-click `uninstall-macos.command` (macOS) or `uninstall-windows.bat` (Windows). Both always remove the `ct3505` conda environment and this project's `.env` file, and additionally remove whichever of the system-wide tools they installed (macOS: Homebrew, Miniconda, SUMO, XQuartz, VS Code, Rosetta 2; Windows: Miniconda, SUMO, VS Code) - but only the ones the installer actually installed for you; anything you already had before running it is left untouched.
 
 ## Installation steps (MacOS, Linux)
 Note: these installation steps will be largely based on Visual Studio Code as your main interface. Other IDEs can be used, but the creation / activation of appropriate conda environments will have to be handled manually.
