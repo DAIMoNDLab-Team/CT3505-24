@@ -4,9 +4,27 @@
 Instead of following the manual steps below, you can run a script that installs everything (Miniconda, SUMO, VS Code, and the required Python packages) with minimal interaction:
 
 - **Windows 11:** double-click `install-windows.bat` (approve the administrator prompt if asked).
-- **macOS:** double-click `install-macos.command` (If MacOS says this is an unverified file, open Settings -> Privacy & Security, scroll down to the bottom of the page and click \'open anyway\', See [here](./macos_privacy_security_example.png) for a screenshot.).
+- **macOS:** double-click `install-macos.command`. **The first time you do this, macOS will refuse to open it and it may look like it's broken - it isn't.** See "macOS: unblocking the scripts" right below, *before* you double-click anything.
 
 Both scripts are safe to re-run and skip anything already installed. Once finished, open VS Code, open this folder, and select the `ct3505` conda environment as your notebook kernel. If you'd rather install things yourself, or the script hits a snag, follow the manual steps below instead.
+
+### macOS: unblocking the scripts (do this first, once)
+Because these `.command` scripts (`install-macos.command`, `uninstall-macos.command`, `run-assignment1-macos.command`) were downloaded from the internet rather than installed from the App Store, macOS's Gatekeeper blocks them from running at all the first time, showing a message like "cannot be opened because it is from an unidentified developer" or "Apple could not verify...". **This is expected and normal - do not delete the file(s), and do not delete or "move to Trash" anything the dialog offers to.**
+
+This cannot be fully automated away (that's Gatekeeper working as intended - a script can't approve itself), but there is a one-time fix that unblocks every script in the folder at once, so you only have to do this once, not once per script:
+
+1. Open **Terminal** (press `Cmd+Space`, type `Terminal`, press Enter).
+2. Type `cd ` (with a trailing space, no Enter yet), then **drag the project folder** (the one containing this file) from Finder into the Terminal window. This fills in the folder's path for you.
+3. Press Enter.
+4. Paste this command and press Enter: `xattr -r -d com.apple.quarantine .`
+5. You can now close Terminal and double-click any `.command` file in the folder normally.
+
+If you'd rather not use Terminal, you can instead do this **for every `.command` file individually**, right before you need to run it:
+1. Double-click the `.command` file. macOS will show a dialog saying it can't be opened - click **Done** (not "Move to Trash").
+2. Open **System Settings -> Privacy & Security**, scroll all the way to the bottom.
+3. You'll see a message naming the blocked file, with an **"Open Anyway"** button next to it - click it, then confirm again if asked.
+4. Double-click the `.command` file again - it will now run.
+See [here](./macos_privacy_security_example.png) for a screenshot of this screen. Note this System Settings step only unblocks the one file you just tried to open, so you'd need to repeat it for each of the other `.command` files the first time you use them.
 
 Once installed, you can launch Assignment 1 any time without opening a terminal or VS Code:
 
