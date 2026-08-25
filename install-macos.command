@@ -59,20 +59,53 @@ echo "Using conda: $CONDA_EXE"
 
 # --- 3. SUMO ---
 step "Checking for SUMO..."
+
+# Looks for an existing SUMO install (however it got there) by checking common
+# install locations for a "tools" subfolder, which only a real SUMO_HOME has.
+find_sumo_home() {
+    local candidate
+    for candidate in /usr/local/share/sumo /usr/local/opt/sumo/share/sumo \
+                      /opt/homebrew/share/sumo /opt/homebrew/opt/sumo/share/sumo \
+                      /Applications/sumo /Library/sumo; do
+        if [[ -d "$candidate/tools" ]]; then
+            echo "$candidate"
+            return 0
+        fi
+    done
+    find /usr/local /opt /Applications /Library -maxdepth 6 -type d -name sumo -path "*share*" 2>/dev/null | head -n1
+}
+
 SUMO_HOME_PATH="${SUMO_HOME:-}"
 if [[ -z "$SUMO_HOME_PATH" ]]; then
-    if ! command -v sumo >/dev/null 2>&1 && ! brew list sumo >/dev/null 2>&1; then
-        echo "Installing SUMO..."
-        brew tap dlr-ts/sumo
-        brew install sumo
-    fi
-    if brew list sumo >/dev/null 2>&1; then
-        SUMO_PREFIX="$(brew --prefix sumo)"
-        if [[ -d "$SUMO_PREFIX/share/sumo" ]]; then
-            SUMO_HOME_PATH="$SUMO_PREFIX/share/sumo"
-        fi
-    fi
+    SUMO_HOME_PATH="$(find_sumo_home)"
 fi
+
+if [[ -z "$SUMO_HOME_PATH" ]] && ! command -v sumo >/dev/null 2>&1; then
+    # The dlr-ts/sumo Homebrew formula is outdated and crashes on install,
+    # so we use SUMO's official .pkg installer from sumo.dlr.de instead.
+    echo "Installing SUMO from the official installer package..."
+    SUMO_VERSION="1.27.1"
+    SUMO_PKG_URL="https://sumo.dlr.de/releases/${SUMO_VERSION}/sumo-${SUMO_VERSION}.pkg"
+    SUMO_PKG_FILE="$(mktemp -t sumo-pkg)"
+    echo "Downloading $SUMO_PKG_URL ..."
+    if ! curl -fsSL "$SUMO_PKG_URL" -o "$SUMO_PKG_FILE"; then
+        echo "That version is no longer available, falling back to the nightly build..."
+        SUMO_PKG_URL="https://sumo.dlr.de/daily/sumo-git.pkg"
+        curl -fsSL "$SUMO_PKG_URL" -o "$SUMO_PKG_FILE"
+    fi
+    echo "Installing SUMO (you may be asked for your Mac login password)..."
+    sudo installer -pkg "$SUMO_PKG_FILE" -target /
+    rm -f "$SUMO_PKG_FILE"
+
+    # sumo-gui and netedit need XQuartz to run.
+    if [[ ! -d "/Applications/Utilities/XQuartz.app" && ! -d "/opt/X11" ]]; then
+        echo "Installing XQuartz (required for sumo-gui and netedit)..."
+        brew install --cask xquartz
+    fi
+
+    SUMO_HOME_PATH="$(find_sumo_home)"
+fi
+
 if [[ -n "$SUMO_HOME_PATH" ]]; then
     echo "Using SUMO_HOME: $SUMO_HOME_PATH"
 else
