@@ -42,7 +42,11 @@ echo "Your browser will open automatically. Close this window (or press Ctrl+C) 
 # "conda run mercury run" mangles the argv Mercury's underlying Jupyter
 # server expects (it ends up treating "run" as a file to open), so activate
 # the environment properly instead, same as the documented manual steps.
-eval "$("$CONDA_EXE" shell.bash hook)"
+# Source conda.sh directly (conda's own recommended way to enable
+# activation in a script) rather than conda init, which requires
+# rc-file changes and a new shell.
+CONDA_BASE="$("$CONDA_EXE" info --base)"
+source "$CONDA_BASE/etc/profile.d/conda.sh"
 conda activate "$ENV_NAME"
 mercury run
 
