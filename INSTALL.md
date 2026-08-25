@@ -13,7 +13,7 @@ Once installed, you can launch Assignment 1 any time without opening a terminal 
 - **Windows 11:** double-click `run-assignment1-windows.bat`.
 - **macOS:** double-click `run-assignment1-macos.command`.
 
-This activates the `ct3505` environment and runs `mercury run` for you; your browser opens automatically.
+This activates the `ct3505` environment and runs `mercury` for you; your browser opens automatically.
 
 **macOS only:** if you ever need to wipe everything the installer set up (e.g. to test the installer again from a clean machine), double-click `uninstall-macos.command`. This removes Homebrew, Miniconda, SUMO, VS Code, and the `ct3505` environment entirely, so only use it if you don't need those tools for anything else.
 
@@ -32,6 +32,8 @@ Note: these installation steps will be largely based on Visual Studio Code as yo
 - Install *lxml* by typing the following in the terminal window: ```pip install lxml```
 - Install *tud-sumo* by typing the following in the terminal window: ```pip install tud-sumo```
 - Install *mercury* by typing the following in the terminal window: ```pip install mercury```
+- Install *pandas* by typing the following in the terminal window: ```pip install pandas```
+- Install *python-dotenv* by typing the following in the terminal window: ```pip install python-dotenv```
 
 ## Installation steps (Windows)
 1. Download and install [Anaconda desktop](https://www.anaconda.com/download)
@@ -48,11 +50,13 @@ Note: these installation steps will be largely based on Visual Studio Code as yo
 - pip install lxml
 - pip install tud-sumo
 - pip install mercury
+- pip install pandas
+- pip install python-dotenv
 
 ## Launching steps (Windows)
 1. Be sure to follow the install steps, first
 2. Follow steps 7-10 from the install guide to launch VSCode and the appropriate terminal environment
-3. Type 'mercury run' in the terminal window
+3. Type 'mercury --working-dir .' in the terminal window
 You can now work on Assignment 1
 
 Shortcut: once installed, you can skip steps 2-3 above by double-clicking `run-assignment1-windows.bat` instead.
@@ -70,7 +74,7 @@ You can now work on Assignment 2
 
 ## Running steps
 ### Assignment 1:
-- [ ] Double-click `run-assignment1-macos.command` (macOS) or `run-assignment1-windows.bat` (Windows), or type "mercury run" yourself in the terminal window. If everything went smoothly during installation, your browser will open with a new window. Have fun!
+- [ ] Double-click `run-assignment1-macos.command` (macOS) or `run-assignment1-windows.bat` (Windows), or type "mercury --working-dir ." yourself in the terminal window. If everything went smoothly during installation, your browser will open with a new window. Have fun!
 ### Assignment 2:
 - [ ] Open the Jupyter notebook in Visual Studio Code and run it as-is, clicking the "Run all" button at the top of the page: ![vscode_gui](./vscode_gui.png)
 

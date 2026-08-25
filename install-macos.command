@@ -182,9 +182,9 @@ else
 fi
 
 # --- 9. Python packages ---
-step "Installing lxml, tud-sumo, and mercury..."
+step "Installing lxml, tud-sumo, mercury, pandas, and python-dotenv..."
 "$CONDA_EXE" run -n "$ENV_NAME" pip install --upgrade pip
-"$CONDA_EXE" run -n "$ENV_NAME" pip install lxml tud-sumo mercury
+"$CONDA_EXE" run -n "$ENV_NAME" pip install lxml tud-sumo mercury pandas python-dotenv
 
 # --- 10. .env file ---
 step "Writing SUMO_HOME to .env..."
@@ -201,5 +201,5 @@ step "Done!"
 echo "Open VS Code, then File -> Open Folder... and select:"
 echo "  $PROJECT_DIR"
 echo "Open Assignment_1.ipynb or Assignment_2.ipynb, click 'Select Kernel...' -> 'Python Environments...' and choose '$ENV_NAME'."
-echo "For Assignment 1, run 'mercury run' in the VS Code terminal (with the '$ENV_NAME' environment active)."
+echo "For Assignment 1, run 'mercury --working-dir .' in the VS Code terminal (with the '$ENV_NAME' environment active), or double-click run-assignment1-macos.command."
 read -p $'\nPress Enter to close this window...'
