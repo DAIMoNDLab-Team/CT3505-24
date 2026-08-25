@@ -6,6 +6,7 @@
 
 set -e
 cd "$(dirname "$0")"
+PROJECT_DIR="$(pwd)"
 ENV_NAME="ct3505"
 
 echo "CT3505-24 - Assignment 1"
@@ -45,6 +46,8 @@ echo "Your browser will open automatically. Close this window (or press Ctrl+C) 
 CONDA_BASE="$("$CONDA_EXE" info --base)"
 source "$CONDA_BASE/etc/profile.d/conda.sh"
 conda activate "$ENV_NAME"
-mercury run
+# Newer Mercury versions dropped the "mercury run" subcommand in favor of
+# passing the notebooks' working directory explicitly.
+mercury --working-dir "$PROJECT_DIR"
 
 read -p $'\nPress Enter to close this window...'

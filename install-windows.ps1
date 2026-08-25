@@ -137,12 +137,12 @@ if ($envList -match "^\s*$EnvName\s") {
 }
 
 # --- 7. Python packages ---
-# Pinned to mercury 2.4.3: the notebooks use its "mercury run" CLI and
-# widget API (e.g. Button.clicked, fractional Sliders), both of which
-# changed in mercury 3.x.
+# Pinned to mercury 3.2.4: the exact version the notebooks' widget API was
+# migrated against, so a future mercury release doesn't silently break the
+# assignment again.
 Write-Step "Installing lxml, tud-sumo, mercury, pandas, and python-dotenv..."
 & $condaExe run -n $EnvName pip install --upgrade pip
-& $condaExe run -n $EnvName pip install lxml tud-sumo "mercury==2.4.3" pandas python-dotenv
+& $condaExe run -n $EnvName pip install lxml tud-sumo "mercury==3.2.4" pandas python-dotenv
 
 # --- 8. .env file ---
 Write-Step "Writing SUMO_HOME to .env..."
@@ -162,5 +162,5 @@ Write-Step "Done!"
 Write-Host "Open VS Code, then File -> Open Folder... and select:"
 Write-Host "  $ProjectDir"
 Write-Host "Open Assignment_1.ipynb or Assignment_2.ipynb, click 'Select Kernel...' -> 'Python Environments...' and choose '$EnvName'."
-Write-Host "For Assignment 1, run 'mercury run' in the VS Code terminal (with the '$EnvName' environment active), or double-click run-assignment1-windows.bat."
+Write-Host "For Assignment 1, run 'mercury --working-dir .' in the VS Code terminal (with the '$EnvName' environment active), or double-click run-assignment1-windows.bat."
 Read-Host "`nPress Enter to close this window"

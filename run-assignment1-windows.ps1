@@ -48,6 +48,8 @@ Write-Host "Starting Mercury for Assignment 1..."
 Write-Host "Your browser will open automatically. Close this window (or press Ctrl+C) to stop the server when you're done."
 (& $condaExe "shell.powershell" "hook") | Out-String | Invoke-Expression
 conda activate $EnvName
-mercury run
+# Newer Mercury versions dropped the "mercury run" subcommand in favor of
+# passing the notebooks' working directory explicitly.
+mercury --working-dir $ProjectDir
 
 Read-Host "`nPress Enter to close this window"
