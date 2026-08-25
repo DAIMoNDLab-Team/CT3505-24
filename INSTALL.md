@@ -48,7 +48,7 @@ Note: these installation steps will be largely based on Visual Studio Code as yo
 - Open VSCode's terminal (menu bar -> Terminal) *after* creating and selecting your .conda enviroment.
 - Activate your new enviromnent by typing the following in the terminal window: conda activate .conda/
 - Install *lxml* by typing the following in the terminal window: ```pip install lxml```
-- Install *tud-sumo* by typing the following in the terminal window: ```pip install tud-sumo```
+- Install *tud-sumo* by typing the following in the terminal window: ```pip install tud-sumo==3.3.2``` (pinned to the version this notebook's code was migrated against)
 - Install *mercury* by typing the following in the terminal window: ```pip install mercury==3.2.4``` (pinned to the version this notebook's widget API was migrated against)
 - Install *pandas* by typing the following in the terminal window: ```pip install pandas```
 - Install *python-dotenv* by typing the following in the terminal window: ```pip install python-dotenv```
@@ -66,7 +66,7 @@ Note: these installation steps will be largely based on Visual Studio Code as yo
 10. in VSCode, Open a new terminal (... -> Terminal -> New Terminal)
 11. (only once!) In the terminal, type the following:
 - pip install lxml
-- pip install tud-sumo
+- pip install tud-sumo==3.3.2
 - pip install mercury==3.2.4
 - pip install pandas
 - pip install python-dotenv

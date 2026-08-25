@@ -137,12 +137,14 @@ if ($envList -match "^\s*$EnvName\s") {
 }
 
 # --- 7. Python packages ---
-# Pinned to mercury 3.2.4: the exact version the notebooks' widget API was
-# migrated against, so a future mercury release doesn't silently break the
-# assignment again.
+# Pinned to mercury 3.2.4 and tud-sumo 3.3.2: the exact versions the
+# notebooks' code was migrated/verified against, so a future release of
+# either package doesn't silently break the assignment again (tud-sumo
+# 3.3.1 renamed Simulation.start()'s get_individual_vehicle_data kwarg to
+# get_fc_data, which broke Assignment 1 the same way mercury 3.x did).
 Write-Step "Installing lxml, tud-sumo, mercury, pandas, and python-dotenv..."
 & $condaExe run -n $EnvName pip install --upgrade pip
-& $condaExe run -n $EnvName pip install lxml tud-sumo "mercury==3.2.4" pandas python-dotenv
+& $condaExe run -n $EnvName pip install lxml "tud-sumo==3.3.2" "mercury==3.2.4" pandas python-dotenv
 
 # --- 8. .env file ---
 Write-Step "Writing SUMO_HOME to .env..."

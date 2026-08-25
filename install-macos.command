@@ -182,12 +182,14 @@ else
 fi
 
 # --- 9. Python packages ---
-# Pinned to mercury 3.2.4: the exact version the notebooks' widget API was
-# migrated against, so a future mercury release doesn't silently break the
-# assignment again.
+# Pinned to mercury 3.2.4 and tud-sumo 3.3.2: the exact versions the
+# notebooks' code was migrated/verified against, so a future release of
+# either package doesn't silently break the assignment again (tud-sumo
+# 3.3.1 renamed Simulation.start()'s get_individual_vehicle_data kwarg to
+# get_fc_data, which broke Assignment 1 the same way mercury 3.x did).
 step "Installing lxml, tud-sumo, mercury, pandas, and python-dotenv..."
 "$CONDA_EXE" run -n "$ENV_NAME" pip install --upgrade pip
-"$CONDA_EXE" run -n "$ENV_NAME" pip install lxml tud-sumo "mercury==3.2.4" pandas python-dotenv
+"$CONDA_EXE" run -n "$ENV_NAME" pip install lxml "tud-sumo==3.3.2" "mercury==3.2.4" pandas python-dotenv
 
 # --- 10. .env file ---
 step "Writing SUMO_HOME to .env..."
