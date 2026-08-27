@@ -1,3 +1,13 @@
 # Local machine state written by install-macos.command, read by
 # uninstall-macos.command. Never meant to be committed.
 .ct3505-install-manifest
+
+# ── run outputs & local state (added during repo consolidation) ──
+.DS_Store
+celerybeat-schedule.db
+django-errors.log
+experiments/*.pkl
+experiments/*.txt
+experiments/*.json
+Network/r_*.xml
+macos_privacy_security_example.png
