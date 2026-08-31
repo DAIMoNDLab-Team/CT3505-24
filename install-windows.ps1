@@ -30,7 +30,11 @@ $InstalledMiniconda = $false
 $InstalledSumo = $false
 $InstalledVSCode = $false
 if (Test-Path $ManifestFile) {
-    $manifestData = Get-Content $ManifestFile | Where-Object { $_ -notmatch '^\s*#' -and $_.Trim() -ne '' } | ConvertFrom-StringData
+    # Join the lines into one string before parsing: piping them to
+    # ConvertFrom-StringData one at a time yields a hashtable per line rather
+    # than a single merged one, and indexing that array by key returns $null.
+    $manifestText = (Get-Content $ManifestFile | Where-Object { $_ -notmatch '^\s*#' -and $_.Trim() -ne '' }) -join "`n"
+    $manifestData = ConvertFrom-StringData $manifestText
     if ($manifestData.ContainsKey('INSTALLED_MINICONDA')) { $InstalledMiniconda = [bool]::Parse($manifestData['INSTALLED_MINICONDA']) }
     if ($manifestData.ContainsKey('INSTALLED_SUMO')) { $InstalledSumo = [bool]::Parse($manifestData['INSTALLED_SUMO']) }
     if ($manifestData.ContainsKey('INSTALLED_VSCODE')) { $InstalledVSCode = [bool]::Parse($manifestData['INSTALLED_VSCODE']) }
@@ -164,6 +168,10 @@ if ($LASTEXITCODE -ne 0) {
 & $condaExe tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Note: could not run 'conda tos accept' for the r channel (fine on older conda versions that don't require it)." -ForegroundColor Yellow
+}
+& $condaExe tos accept --override-channels --channel https://repo.anaconda.com/pkgs/msys2
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Note: could not run 'conda tos accept' for the msys2 channel (fine on older conda versions that don't require it)." -ForegroundColor Yellow
 }
 
 # --- 6. Conda environment ---

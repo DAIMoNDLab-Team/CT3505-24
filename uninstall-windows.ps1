@@ -31,7 +31,11 @@ $InstalledMiniconda = $false
 $InstalledSumo = $false
 $InstalledVSCode = $false
 if (Test-Path $ManifestFile) {
-    $manifestData = Get-Content $ManifestFile | Where-Object { $_ -notmatch '^\s*#' -and $_.Trim() -ne '' } | ConvertFrom-StringData
+    # Join the lines into one string before parsing: piping them to
+    # ConvertFrom-StringData one at a time yields a hashtable per line rather
+    # than a single merged one, and indexing that array by key returns $null.
+    $manifestText = (Get-Content $ManifestFile | Where-Object { $_ -notmatch '^\s*#' -and $_.Trim() -ne '' }) -join "`n"
+    $manifestData = ConvertFrom-StringData $manifestText
     if ($manifestData.ContainsKey('INSTALLED_MINICONDA')) { $InstalledMiniconda = [bool]::Parse($manifestData['INSTALLED_MINICONDA']) }
     if ($manifestData.ContainsKey('INSTALLED_SUMO')) { $InstalledSumo = [bool]::Parse($manifestData['INSTALLED_SUMO']) }
     if ($manifestData.ContainsKey('INSTALLED_VSCODE')) { $InstalledVSCode = [bool]::Parse($manifestData['INSTALLED_VSCODE']) }
