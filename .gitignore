@@ -11,3 +11,6 @@ experiments/*.txt
 experiments/*.json
 Network/r_*.xml
 macos_privacy_security_example.png
+
+# Written by the installers (machine-specific SUMO_HOME)
+.env
