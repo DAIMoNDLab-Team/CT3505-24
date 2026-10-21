@@ -1,7 +1,7 @@
 # CT3505-24 - Assignments 1 & 2 codebase installation instructions
 
-## Quickstart: automated installer
-Instead of following the manual steps below, you can run a script that installs everything (Miniconda, SUMO, VS Code, and the required Python packages) with minimal interaction:
+## Windows & MacOS: Automated installers
+A script that installs everything (Miniconda, SUMO, VS Code, and the required Python packages) with minimal interaction has been prepared for both Operating Systems:
 
 - **Windows 11:** double-click `install-windows.bat` (approve the administrator prompt if asked).
 - **macOS:** double-click `install-macos.command`. **The first time you do this, macOS will refuse to open it and it may look like it's broken - it isn't.** See "macOS: unblocking the scripts" right below, *before* you double-click anything.
@@ -26,6 +26,9 @@ If you'd rather not use Terminal, you can instead do this **for every `.command`
 4. Double-click the `.command` file again - it will now run.
 See [here](./macos_privacy_security_example.png) for a screenshot of this screen. Note this System Settings step only unblocks the one file you just tried to open, so you'd need to repeat it for each of the other `.command` files the first time you use them.
 
+
+## Launching steps
+### Assignment 1:
 Once installed, you can launch Assignment 1 any time without opening a terminal or VS Code:
 
 - **Windows 11:** double-click `run-assignment1-windows.bat`.
@@ -33,9 +36,18 @@ Once installed, you can launch Assignment 1 any time without opening a terminal 
 
 This activates the `ct3505` environment and runs `mercury` for you; your browser opens automatically.
 
+
+### Assignment 2:
+- Open the Jupyter notebook in Visual Studio Code and run it as-is, clicking the "Run all" button at the top of the page: ![vscode_gui](./vscode_gui.png)
+
+
 If you ever need to undo what the installer set up, double-click `uninstall-macos.command` (macOS) or `uninstall-windows.bat` (Windows). Both always remove the `ct3505` conda environment and this project's `.env` file, and additionally remove whichever of the system-wide tools they installed (macOS: Homebrew, Miniconda, SUMO, XQuartz, VS Code, Rosetta 2; Windows: Miniconda, SUMO, VS Code) - but only the ones the installer actually installed for you; anything you already had before running it is left untouched.
 
-## Installation steps (MacOS, Linux)
+# Alternative Manual Installation steps
+**These instructions should _only_ be followed if the above method(s) fail!**
+These instructions also assume you know how to appropriately manage your system and environment. You are solely responsible for ensuring that your install is non-destructive (avoids replacing / interference with other apps).
+
+## Manual Installation (MacOS, Linux)
 Note: these installation steps will be largely based on Visual Studio Code as your main interface. Other IDEs can be used, but the creation / activation of appropriate conda environments will have to be handled manually.
 
 - Download and install [Visual Studio Code](https://code.visualstudio.com/)
@@ -48,12 +60,12 @@ Note: these installation steps will be largely based on Visual Studio Code as yo
 - Open VSCode's terminal (menu bar -> Terminal) *after* creating and selecting your .conda enviroment.
 - Activate your new enviromnent by typing the following in the terminal window: conda activate .conda/
 - Install *lxml* by typing the following in the terminal window: ```pip install lxml```
-- Install *tud-sumo* by typing the following in the terminal window: ```pip install tud-sumo==3.3.2``` (pinned to the version this notebook's code was migrated against)
-- Install *mercury* by typing the following in the terminal window: ```pip install mercury==3.2.4``` (pinned to the version this notebook's widget API was migrated against)
+- Install *tud-sumo* by typing the following in the terminal window: ```pip install tud-sumo==3.3.2``` 
+- Install *mercury* by typing the following in the terminal window: ```pip install mercury==3.2.4``` 
 - Install *pandas* by typing the following in the terminal window: ```pip install pandas```
 - Install *python-dotenv* by typing the following in the terminal window: ```pip install python-dotenv```
 
-## Installation steps (Windows)
+## Manual Installation (Windows)
 1. Download and install [Anaconda desktop](https://www.anaconda.com/download)
 2. Download and install [Visual Studio Code](https://code.visualstudio.com/)
 3. Download and install [SUMO](https://eclipse.dev/sumo/)
@@ -71,31 +83,11 @@ Note: these installation steps will be largely based on Visual Studio Code as yo
 - pip install pandas
 - pip install python-dotenv
 
-## Launching steps (Windows)
+## Manual Launching steps (Windows)
 1. Be sure to follow the install steps, first
 2. Follow steps 7-10 from the install guide to launch VSCode and the appropriate terminal environment
 3. Type 'mercury --working-dir .' in the terminal window
 You can now work on Assignment 1
-
-Shortcut: once installed, you can skip steps 2-3 above by double-clicking `run-assignment1-windows.bat` instead.
-
-## Additional settings for Assignment 2 (Windows only, *only once*!)
-1. In VSCode, click on the Extensions tab, navigate to the Jupyter extension
-2. Click on "Install specific version..." and select version 2025.7.0 from the list
-3. Click on "Restart extensions"
-4. Open Assignment_2.ipynb
-5. Click on Select Kernel... and find the environment you created during installation
-6. Click on "Run All"
-You can now work on Assignment 2
-
-
-
-## Running steps
-### Assignment 1:
-- [ ] Double-click `run-assignment1-macos.command` (macOS) or `run-assignment1-windows.bat` (Windows), or type "mercury --working-dir ." yourself in the terminal window. If everything went smoothly during installation, your browser will open with a new window. Have fun!
-### Assignment 2:
-- [ ] Open the Jupyter notebook in Visual Studio Code and run it as-is, clicking the "Run all" button at the top of the page: ![vscode_gui](./vscode_gui.png)
-
 
 
 
