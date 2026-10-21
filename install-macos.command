@@ -177,16 +177,22 @@ if [[ -z "$SUMO_HOME_PATH" ]]; then
     INSTALLED_SUMO=true
     save_manifest
 
-    # sumo-gui and netedit need XQuartz to run.
-    if [[ ! -d "/Applications/Utilities/XQuartz.app" && ! -d "/opt/X11" ]]; then
-        echo "Installing XQuartz (required for sumo-gui and netedit)..."
-        brew install --cask xquartz
-        INSTALLED_XQUARTZ=true
-        save_manifest
-    fi
-
     SUMO_HOME_PATH="$(find_sumo_home)"
     sumo_is_working "$SUMO_HOME_PATH" || SUMO_HOME_PATH=""
+fi
+
+# sumo-gui and netedit need XQuartz to run. Checked on every run (not only when
+# SUMO was just installed), and by the real app/X server binary rather than
+# /opt/X11, which can linger as an empty folder after XQuartz is removed.
+step "Checking for XQuartz..."
+if [[ ! -d "/Applications/Utilities/XQuartz.app" && ! -x "/opt/X11/bin/Xquartz" ]]; then
+    echo "Installing XQuartz (required for sumo-gui and netedit)..."
+    brew install --cask xquartz
+    INSTALLED_XQUARTZ=true
+    save_manifest
+    echo "NOTE: log out and back in (or reboot) once before using sumo-gui / netedit, so XQuartz is picked up."
+else
+    echo "XQuartz is already installed."
 fi
 
 if [[ -n "$SUMO_HOME_PATH" ]]; then
