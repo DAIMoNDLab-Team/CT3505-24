@@ -1,4 +1,4 @@
-# netedit in Docker (workaround for macOS Tahoe)
+# netedit and sumo-gui in Docker (workaround for macOS Tahoe)
 
 ## Why this exists
 On macOS 26 (Tahoe), `netedit` (and `sumo-gui`) open under XQuartz but never draw the network: the canvas stays empty on first render and on resize. This was reproduced on macOS 26.5.2 with XQuartz (X.Org 21.1.23) and SUMO 1.27.1.
@@ -48,9 +48,33 @@ Run these from the repository root.
    docker rm -f netedit
    ```
 
+### Running sumo-gui instead
+The same image can run `sumo-gui`: set `APP=sumo-gui` and pass a `.sumocfg` file from `Network/`.
+
+```sh
+docker run -d --name sumo-gui -p 127.0.0.1:6080:6080 -e APP=sumo-gui -v "$PWD/Network:/work" netedit-novnc /start.sh -c rm_circle_a1.sumocfg
+```
+
+Open <http://localhost:6080/vnc.html>, click **Connect**, and press Play in sumo-gui. Stop it with `docker rm -f sumo-gui`.
+
+- netedit and sumo-gui both use port 6080, so run one at a time, or map a different host port for the second one (e.g. `-p 127.0.0.1:6081:6080`, then open port 6081).
+- This is a standalone viewer. The notebooks' "Show simulation" toggle still starts the sumo-gui installed on your Mac, which does not draw on Tahoe. To watch a scenario, run it here with the matching `.sumocfg`.
+- The image is still called `netedit-novnc` for historical reasons; it contains both programs.
+
+## Launch scripts
+Instead of typing the `docker` commands, run one of these from anywhere:
+
+```sh
+tools/netedit-docker/run-netedit.sh [args]     # e.g. -s circle.net.xml
+tools/netedit-docker/run-sumo-gui.sh [args]    # e.g. -c rm_circle_a1.sumocfg
+```
+
+They build the image if needed, ask before killing an existing container (of the same app, or one already using port 6080), and print the link to open once the viewer is ready. With no arguments the app starts without a file (use File -> Open, `Network/` is mounted at `/work`); pass arguments to open a file directly. Set `PORT=6081` to use another host port.
+
 ## Files
+- `run-netedit.sh`, `run-sumo-gui.sh`: thin wrappers around `run-app.sh`, which does the work.
 - `Dockerfile`: Ubuntu 24.04 + Xvfb (virtual display) + x11vnc/noVNC (browser access) + fluxbox (window manager) + SUMO 1.27.1.
-- `start.sh`: starts the display, VNC, and web server, then runs `netedit` with whatever arguments you pass.
+- `start.sh`: starts the display, VNC, and web server, then runs the program named by the `APP` environment variable (default `netedit`, or `sumo-gui`) with whatever arguments you pass.
 
 ## Notes
 - The SUMO version is pinned to match the one the installers set up. If you change the installed SUMO version, update the pin in the `Dockerfile` so netedit does not write files in a different format.

@@ -5,4 +5,4 @@ fluxbox &
 x11vnc -display :0 -forever -nopw -quiet -rfbport 5900 &
 websockify --web /usr/share/novnc 6080 localhost:5900 &
 sleep 1
-exec netedit "$@"
+exec "${APP:-netedit}" "$@"
