@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Assignment 1: no detectors; vehicles keep circulating (no exit) -->
+
+<additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
+    <rerouter id="rr_0" edges="B999B1000.327" pos="181.67,34.64">
+        <interval begin="0.00" end="1000000000.00">
+            <destProbReroute id="B999B1000" probability="1.00"/>
+        </interval>
+    </rerouter>
+    <rerouter id="rr_1" edges="B999B1000" pos="-4.20,109.14">
+        <interval begin="0.00" end="1000000000.00">
+            <destProbReroute id="B999B1000.327" probability="1.00"/>
+        </interval>
+    </rerouter>
+</additional>
