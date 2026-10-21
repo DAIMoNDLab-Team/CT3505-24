@@ -131,12 +131,30 @@ find_sumo_home() {
     find -L /usr/local /opt /Applications /Library -maxdepth 8 -type d -name sumo -path "*share*" 2>/dev/null | head -n1
 }
 
+# A SUMO_HOME value (or a found folder) alone proves nothing: it can be stale
+# after a partial uninstall, or point at a folder with no working binary. So
+# only trust it if its "tools" folder exists AND the matching sumo binary runs.
+sumo_is_working() {
+    local home="$1" sumo_bin
+    [[ -n "$home" && -d "$home/tools" ]] || return 1
+    if [[ "$home" == */share/sumo && -x "${home%/share/sumo}/bin/sumo" ]]; then
+        sumo_bin="${home%/share/sumo}/bin/sumo"
+    else
+        sumo_bin="$(command -v sumo)" || return 1
+    fi
+    "$sumo_bin" --version >/dev/null 2>&1
+}
+
 SUMO_HOME_PATH="${SUMO_HOME:-}"
-if [[ -z "$SUMO_HOME_PATH" ]]; then
+if ! sumo_is_working "$SUMO_HOME_PATH"; then
+    if [[ -n "$SUMO_HOME_PATH" ]]; then
+        echo "SUMO_HOME is set to '$SUMO_HOME_PATH' but SUMO doesn't work from there, ignoring it."
+    fi
     SUMO_HOME_PATH="$(find_sumo_home)"
+    sumo_is_working "$SUMO_HOME_PATH" || SUMO_HOME_PATH=""
 fi
 
-if [[ -z "$SUMO_HOME_PATH" ]] && ! command -v sumo >/dev/null 2>&1; then
+if [[ -z "$SUMO_HOME_PATH" ]]; then
     # The dlr-ts/sumo Homebrew formula is outdated and crashes on install,
     # so we use SUMO's official .pkg installer from sumo.dlr.de instead.
     echo "Installing SUMO from the official installer package..."
@@ -168,6 +186,7 @@ if [[ -z "$SUMO_HOME_PATH" ]] && ! command -v sumo >/dev/null 2>&1; then
     fi
 
     SUMO_HOME_PATH="$(find_sumo_home)"
+    sumo_is_working "$SUMO_HOME_PATH" || SUMO_HOME_PATH=""
 fi
 
 if [[ -n "$SUMO_HOME_PATH" ]]; then
@@ -253,6 +272,6 @@ save_manifest
 step "Done!"
 echo "Open VS Code, then File -> Open Folder... and select:"
 echo "  $PROJECT_DIR"
-echo "Open Assignment_1.ipynb or Assignment_2.ipynb, click 'Select Kernel...' -> 'Python Environments...' and choose '$ENV_NAME'."
-echo "For Assignment 1, run 'mercury --working-dir .' in the VS Code terminal (with the '$ENV_NAME' environment active), or double-click run-assignment1-macos.command."
+echo "For Assignment 1, double-click run-assignment1-macos.command (no terminal or VS Code needed); your browser opens automatically."
+echo "For Assignment 2, open Assignment_2.ipynb in VS Code, click 'Select Kernel...' -> 'Python Environments...' and choose '$ENV_NAME', then click 'Run all' at the top of the page."
 read -p $'\nPress Enter to close this window...'
