@@ -5,7 +5,12 @@
 
 <additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
     <!-- Detectors -->
-    <inductionLoop id="ramp_downstream" lane="B999B1000.24_0" pos="13.66" period="5.00" file="r_d.xml"/>
+    <entryExitDetector id="ramp_downstream" period="5.00" file="r_d.xml">
+        <detEntry lane="B999B1000.24_0" pos="0.10"/>
+        <detEntry lane="B999B1000.24_1" pos="0.10"/>
+        <detExit lane="B999B1000.24_0" pos="13.66"/>
+        <detExit lane="B999B1000.24_1" pos="13.66"/>
+    </entryExitDetector>
     <inductionLoop id="ramp_inflow" lane="E1_0" pos="53.74" period="5.00" file="r_i.xml"/>
     <inductionLoop id="ramp_upstream" lane="B999B1000.327_0" pos="232.28" period="5.00" file="r_u.xml"/>
     <!-- Other additionals -->
